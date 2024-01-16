@@ -1,0 +1,30 @@
+.table-container {
+    overflow: auto !important;
+    max-height: 400px !important;
+}
+
+.th-class {
+    position: sticky!important;
+    top: 0 !important;
+    opacity: 1 !important;
+    z-index: 99 !important;
+}
+
+
+*{
+    scrollbar-width: thin;
+    scrollbar-color: #4db3fa #fcfcfc;
+}
+
+/* Works on Chrome/Edge/Safari */
+*::-webkit-scrollbar {
+    width: 12px;
+}
+*::-webkit-scrollbar-track {
+    background: #fcfcfc;
+}
+*::-webkit-scrollbar-thumb {
+    background-color: #4db3fa;
+    border-radius: 15px;
+    border: 2px solid #4db3fa;
+}

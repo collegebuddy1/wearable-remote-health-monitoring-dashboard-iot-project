@@ -1,0 +1,11 @@
+#inputBox {
+    border-radius: 6px;
+    border: transparent;
+    padding-left: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: 45px;
+    font-size: 14px;
+    color: lightgray !important;
+    filter: drop-shadow(0 1px 0.10rem lightgray);
+}

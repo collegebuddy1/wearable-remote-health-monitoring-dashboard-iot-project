@@ -1,0 +1,118 @@
+type User @model 
+@auth(rules: [
+  { allow:  private, provider: iam },
+  { allow:  private, provider: userPools }, 
+  { allow: owner }
+]){
+  id: ID!
+  firstName: String!
+  lastName: String!
+  age: Int
+  profileImageURL: String
+  profileImage: S3Object
+  device: Device @connection
+  facility: String
+  phoneNumber: String
+  email: String
+  address: Address
+  emergencyContacts: [Contact]  
+  additionalNotes: String
+}
+
+type S3Object
+@aws_iam @aws_cognito_user_pools {
+  bucket: String!
+  region: String!
+  key: String!
+}
+
+type Device @model 
+@auth(rules: [
+  { allow:  private, provider: iam }, 
+  { allow:  private, provider: userPools }, 
+  { allow: owner }
+]){
+  id: ID!
+  userID: ID
+  deviceOS: String
+  deviceStatus: String
+  lastLocation: LatLon
+  lastHeartRate: Int
+  geofence: Location @connection
+}
+
+
+type Location @model 
+@key(name: "byLocationName", fields: ["locationName"])
+@auth(rules: [
+  { allow:  private, provider: iam }, 
+  { allow:  private, provider: userPools }, 
+  { allow: owner }
+]) {
+  id: ID!
+  locationName: String!
+  boundary: [LatLon!]!
+}
+
+type Alert @model (subscriptions: { level: public })
+@auth(rules: [
+  { allow: private, provider: iam },
+  { allow: private, provider: userPools },  
+  { allow: owner }
+]) {
+  id: ID!
+  userID: ID!
+  type: String!
+  description: String!
+  location: LatLon
+  createdAt: AWSDateTime!
+  expirationTime: Int!
+}
+
+type Data @model
+@key(name: "byUserID", fields: ["userID", "createdAt"])
+@key(name: "byDeviceID", fields: ["deviceID", "createdAt"])
+@key(name: "byUserIDAndObservationType", fields: ["userID", "observationType", "createdAt"])
+@auth(rules: [
+  { allow: private, provider: iam }, 
+  { allow: private, provider: userPools }, 
+  { allow: owner }
+]) {
+  id: ID!
+  deviceID: ID!
+  userID: ID!
+  location: LatLon
+  observationType: String!
+  observationUnit: String
+  observationValue: String
+  createdAt: String!
+  expirationTime: Int!
+}
+
+
+type LatLon
+@aws_iam @aws_cognito_user_pools {
+  lat: Float!
+  lng: Float!
+}
+
+type Contact 
+@aws_iam @aws_cognito_user_pools {
+  firstName: String!
+  lastName: String!
+  relationshipToUser: String
+  phoneNumber: String
+  email: String
+  address: Address
+}
+
+
+type Address  
+@aws_iam @aws_cognito_user_pools {
+  streetAddress: String
+  city: String
+  stateProvince: String
+  country: String
+  postalZip: String
+}
+
